@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Grundos Cafe Discord Webhook Smugglers Cove Logger
-// @version      1.0
+// @version      1.1
 // @description  Logs visits to Smugglers Cove and whether there is an item on Discord
 // @author       Lav
 // @match        *://*.grundos.cafe/pirates/smugglerscove*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=grundos.cafe
+// @icon         https://avatars.githubusercontent.com/u/178112779?v=4&size=40
 // @grant        GM.getValue
 // @grant        GM.setValue
 // @updateURL    https://raw.githubusercontent.com/Lavfluff/GC-userscripts/refs/heads/main/gc-discord-webhook-smugglers-cove-logger.js
@@ -145,7 +145,7 @@
     // get NST time
     function getNSTTimestamp() {
         const nstElement = document.querySelector(".nst");
-        return nstElement ? nstElement.innerText.trim() : "Unknown NST time";
+        return nstElement ? nstElement.innerText.replace(/\n/g, '').trim() : "Unknown NST time";
     }
 
     async function logCoveVisit(webhookUrls) {
