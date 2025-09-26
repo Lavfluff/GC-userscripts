@@ -7,7 +7,7 @@
 // @grant        GM_addStyle
 // @grant        GM.getValue
 // @grant        GM.setValue
-// @version      1.0
+// @version      1.1
 // @updateURL    https://raw.githubusercontent.com/Lavfluff/GC-userscripts/refs/heads/main/gc-scorchy-slots-road-to-jackpot-helper.js
 // @downloadURL  https://raw.githubusercontent.com/Lavfluff/GC-userscripts/refs/heads/main/gc-scorchy-slots-road-to-jackpot-helper.js
 // ==/UserScript==
@@ -57,7 +57,7 @@
         .jackpot-hold input[type="checkbox"] {
             transform: scale(2);
             margin-top: 5px;
-        }
+        }https://github.com/Lavfluff/GC-userscripts/blob/main/gc-scorchy-slots-road-to-jackpot-helper.js
         .playagain-cloned input:disabled {
             background: #aaa !important;
             cursor: not-allowed !important;
@@ -66,8 +66,15 @@
 
     const mainContent = document.querySelector("#page_content > main");
     if (!mainContent) return;
-    const playAgainOriginal = document.querySelector(".button-group input[type="submit"][value="Play Again"]");
-
+    
+    // check, if the "Play Again" button exists on the page, to prevent running on 'I am bored' page
+    const anyPlayAgain = Array.from(document.querySelectorAll(".button-group > input"))
+    .some(btn => btn.value.trim() === "Play Again");
+    if (!anyPlayAgain) {
+        return;
+    }
+    const playAgainOriginal = document.querySelector(".button-group > input:nth-child(1)");
+    
     // only on actual slots pages, not when you are out of plays for the day
     if (playAgainOriginal) {
         const playAgainBtnContainer = document.createElement("div");
