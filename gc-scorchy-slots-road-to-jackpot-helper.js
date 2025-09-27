@@ -7,7 +7,7 @@
 // @grant        GM_addStyle
 // @grant        GM.getValue
 // @grant        GM.setValue
-// @version      1.1
+// @version      1.2
 // @updateURL    https://raw.githubusercontent.com/Lavfluff/GC-userscripts/refs/heads/main/gc-scorchy-slots-road-to-jackpot-helper.js
 // @downloadURL  https://raw.githubusercontent.com/Lavfluff/GC-userscripts/refs/heads/main/gc-scorchy-slots-road-to-jackpot-helper.js
 // ==/UserScript==
@@ -70,7 +70,9 @@
     // check, if the "Play Again" button exists on the page, to prevent running on 'I am bored' page
     const anyPlayAgain = Array.from(document.querySelectorAll(".button-group > input"))
     .some(btn => btn.value.trim() === "Play Again");
-    if (!anyPlayAgain) {
+    const anyCollectWinnings = Array.from(document.querySelectorAll(".button-group > input"))
+    .some(btn => btn.value.trim() === "Collect Winnings");
+    if (!anyPlayAgain && !anyCollectWinnings) {
         return;
     }
     const playAgainOriginal = document.querySelector(".button-group > input:nth-child(1)");
