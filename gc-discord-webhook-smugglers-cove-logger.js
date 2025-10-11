@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Grundos Cafe Discord Webhook Smugglers Cove Logger
-// @version      1.1
+// @version      1.2
 // @description  Logs visits to Smugglers Cove and whether there is an item on Discord
 // @author       Lav
 // @match        *://*.grundos.cafe/pirates/smugglerscove*
@@ -18,6 +18,26 @@
     const page_text = document.body.innerText;
     const content = document.getElementById("page_content");
     let payload = {};
+    
+    // load stored visit counter and last date
+    let storedData = await GM.getValue("coveVisits", { counter: 0, date: null });
+    let todayNST = new Date().toLocaleDateString('en-US', { timeZone: 'America/Los_Angeles' });
+    
+    // reset counter if date has changed
+    if (storedData.date !== todayNST) {
+        storedData.counter = 0;
+        storedData.date = todayNST;
+        await GM.setValue("coveVisits", storedData);
+    }
+    
+    // increment counter if user still has visits left
+    if (storedData.counter < 6) {
+        storedData.counter++;
+        await GM.setValue("coveVisits", storedData);
+        console.log(`Visit #${storedData.counter} for today (${todayNST})`);
+    } else {
+        console.log("All 6 visits used for today!");
+    }
 
     // initialisation
     async function init() {
@@ -150,6 +170,7 @@
 
     async function logCoveVisit(webhookUrls) {
         payload.timestamp = new Date();
+        payload.visitNumber = storedData.counter;
 
         // extract username
         let usernameMatch = /user=(.*?)"/.exec(page_html);
@@ -182,7 +203,7 @@
         } else if (payload.item) {
             embedDescription = `\`${payload.username}\` visited Smugglers Cove.\nAnd managed to grab a goodie!!\nItem: \`${payload.item}\`\nCost: \`${payload.cost}\``;
         } else {
-            embedDescription = `\`${payload.username}\` visited Smugglers Cove.\nBut it was empty!`;
+            embedDescription = `\`${payload.username}\` visited Smugglers Cove.\nBut it was empty!\n\nVisit #\`${payload.visitNumber}\` of 6\n`;
         }
 
         const discordPayload = {
