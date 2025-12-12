@@ -63,8 +63,6 @@
             delete data[name];
             saveData(data);
         }
-
-        renderUI(); // re-render to show it's gone
     }
 
     function addDataDisplayButton() {
@@ -158,7 +156,6 @@
             }
             if (confirm(`Delete stored data for "${enemyName}"?`)) {
                 wipeEnemyData(enemyName);
-                renderStats(); // refresh UI after wipe
             }
         });
 
@@ -193,13 +190,10 @@
 
             const text = tds[1].textContent.trim();
 
-            // Filter rows: must START with the enemy name
+            // Filter rows: must *start* with the enemy name
             if (!text.startsWith(enemyName)) return;
 
-            // ------------------------------------------------------
-            // ABILITIES (whitelist scan in same valid td)
-            // ------------------------------------------------------
-
+            // ABILITIES
             let isAbility = false;
             ABILITIES.forEach(ability => {
                 if (text.includes(ability)) {
@@ -211,9 +205,7 @@
             });
             if (isAbility) return;
 
-            // ------------------------------------------------------
-            // STANCES (whitelist scan in same valid td)
-            // ------------------------------------------------------
+            // STANCES
             let isStance = false;
             Object.entries(STANCE_KEYWORDS).forEach(([keyword, stance]) => {
                 if (text.includes(keyword)) {
@@ -224,9 +216,7 @@
                 }
             });
             if (isStance) return;
-            // ------------------------------------------------------
-            // WEAPONS (only from <strong> tags in valid enemy rows)
-            // ------------------------------------------------------
+            // WEAPONS
             const strongs = [...tds[1].querySelectorAll("strong")];
 
             strongs.forEach(el => {
