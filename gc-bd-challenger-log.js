@@ -44,18 +44,21 @@
     };
     let enemyName = null;
 
+    // Data management
     function loadData() {
-        try {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-        } catch {
-            return {};
-        }
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
     }
-
     function saveData(data) {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data, null, 2));
     }
 
+    // Helping functions
+    function ensureEnemy(data, name) {
+        if (!data[name]) {
+            data[name] = { weapons: [], abilities: [], stances: [] };
+        }
+        return data[name];
+    }
     function wipeEnemyData(name) {
         const data = loadData();
 
@@ -66,6 +69,7 @@
     }
 
     // UI elements
+    // one general button creator for all three buttons
     function createButton({ text, left, width = "150px", onClick, extraCSS = {} }) {
         const btn = document.createElement("button");
         btn.textContent = text;
@@ -92,7 +96,6 @@
         document.body.appendChild(btn);
         return btn;
     }
-    
     function addDataDisplayButton() {
         createButton({
             text: "📘 Opponent Data",
@@ -103,7 +106,6 @@
             }
         });
     }
-
     function addManualWeaponButton() {
         createButton({
             text: "➕ Add weapon manually",
@@ -116,13 +118,10 @@
                 if (!weapon) return;
 
                 const data = loadData();
+                let enemy = ensureEnemy(data, enemyName);
 
-                if (!data[enemyName]) {
-                    data[enemyName] = { weapons: [], abilities: [], stances: [] };
-                }
-
-                if (!data[enemyName].weapons.includes(weapon)) {
-                    data[enemyName].weapons.push(weapon);
+                if (!enemy.weapons.includes(weapon)) {
+                    enemy.weapons.push(weapon);
                     saveData(data);
                     alert(`Added "${weapon}" to ${enemyName}.`);
                 } else {
@@ -131,7 +130,6 @@
             }
         });
     }
-
     function addWipeButton() {
         createButton({
             text: "🗑️",
@@ -146,22 +144,20 @@
         });
     }
 
+    // combatlog parser
     function parseBattleLog() {
+        // query for combatlog table
         const log = document.querySelector("#combatlog");
         if (!log) return;
-
         const headerRow = log.querySelector("tr");
         if (!headerRow) return;
-
         const enemyNameCell = headerRow.querySelector("td:last-child b");
         if (!enemyNameCell) return;
 
+        // check whether enemy already exists in data
         enemyName = enemyNameCell.textContent.trim().replace(/\s+/g, " ");
-
         const data = loadData();
-        if (!data[enemyName]) {
-            data[enemyName] = { weapons: [], abilities: [], stances: [] };
-        }
+        let enemy = ensureEnemy(data, enemyName);
 
         const playerNameCell = headerRow.querySelector("td:first-child b");
         const playerName = playerNameCell ? playerNameCell.textContent.trim() : null;
@@ -182,8 +178,8 @@
             ABILITIES.forEach(ability => {
                 if (text.includes(ability)) {
                     isAbility = true;
-                    if (!data[enemyName].abilities.includes(ability)) {
-                        data[enemyName].abilities.push(ability);
+                    if (!enemy.abilities.includes(ability)) {
+                        enemy.abilities.push(ability);
                     }
                 }
             });
@@ -194,8 +190,8 @@
             Object.entries(STANCE_KEYWORDS).forEach(([keyword, stance]) => {
                 if (text.includes(keyword)) {
                     isStance = true;
-                    if (!data[enemyName].stances.includes(stance)) {
-                        data[enemyName].stances.push(stance);
+                    if (!enemy.stances.includes(stance)) {
+                        enemy.stances.push(stance);
                     }
                 }
             });
@@ -207,16 +203,15 @@
                 const name = el.textContent.trim();
                 if (name === enemyName || name === playerName || name === "critical hit") return;
 
-                if (!data[enemyName].weapons.includes(name)) {
-                    data[enemyName].weapons.push(name);
+                if (!enemy.weapons.includes(name)) {
+                    enemy.weapons.push(name);
                 }
             });
         });
-
         saveData(data);
     }
 
-    // Start
+    // main
     parseBattleLog();
     addDataDisplayButton();
     addWipeButton();
