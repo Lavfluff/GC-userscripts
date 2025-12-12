@@ -1,0 +1,39 @@
+{
+  "The Drenched": {
+    "weapons": [
+      "Water Muffin",
+      "Sword of Apocalypse",
+      "Pot of Darkness",
+      "Cup of Water",
+      "U-Bend of Great Justice",
+      "Jade Scorchstone",
+      "Coral Cutlass"
+    ],
+    "abilities": [
+      "Heal",
+      "Water Breathing",
+      "Watery Guardian"
+    ],
+    "stances": [
+      "Berserk Attack"
+    ]
+  },
+  "Slug Monster": {
+    "weapons": [
+      "Freezing Potion",
+      "Vile Swamp Water",
+      "Rolling Pin of Slime",
+      "Rancid Battle Dung",
+      "Slugawoo",
+      "Jade Scorchstone"
+    ],
+    "abilities": [
+      "Heal",
+      "Watery Guardian",
+      "Water Breathing"
+    ],
+    "stances": [
+      "Berserk Attack"
+    ]
+  }
+}
