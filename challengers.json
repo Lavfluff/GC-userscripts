@@ -35,5 +35,48 @@
     "stances": [
       "Berserk Attack"
     ]
+  },
+  "Chiazilla": {
+    "weapons": [
+      "Bent Sword",
+      "Rainbow Swirly Thing",
+      "Chiazillas Horn of Spikefish",
+      "Water Scarab",
+      "Wand of Flamebolt",
+      "Jade Scorchstone",
+      "Chiazillas Shield",
+      "Trident of Chiazilla"
+    ],
+    "abilities": [
+      "Watery Guardian",
+      "Heal",
+      "Water Breathing"
+    ],
+    "stances": [
+      "Berserk Attack"
+    ]
+  },
+  "Battle Faerie": {
+    "weapons": [
+      "Faerie Acorns",
+      "Faerie Fog",
+      "Jade Scorchstone",
+      "Ghostkersword",
+      "Battle Slices Stamp",
+      "Wand of the Dark Faerie",
+      "Battle Ready!",
+      "Battledome Techniques",
+      "After the Battle"
+    ],
+    "abilities": [
+      "Psychic Blast",
+      "Sink",
+      "Diamond Dust"
+    ],
+    "stances": [
+      "Fierce Attack",
+      "Normal Attack",
+      "Berserk Attack"
+    ]
   }
 }
