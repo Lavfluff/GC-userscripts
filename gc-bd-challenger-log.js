@@ -65,101 +65,85 @@
         }
     }
 
-    function addDataDisplayButton() {
+    // UI elements
+    function createButton({ text, left, width = "150px", onClick, extraCSS = {} }) {
         const btn = document.createElement("button");
-        btn.textContent = "📘 Opponent Data";
-        btn.style.position = "fixed";
-        btn.style.bottom = "20px";
-        btn.style.left = "20px";
-        btn.style.zIndex = "99999";
-        btn.style.padding = "10px 14px";
-        btn.style.width = "150px";
-        btn.style.fontSize = "14px";
-        btn.style.borderRadius = "8px";
-        btn.style.background = "#6b63ff";
-        btn.style.color = "white";
-        btn.style.border = "none";
-        btn.style.cursor = "pointer";
-        btn.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
+        btn.textContent = text;
 
-        btn.onclick = () => {
-            const data = loadData();
-            alert(JSON.stringify(data, null, 2));
-        };
+        // Shared styling
+        Object.assign(btn.style, {
+            position: "fixed",
+            bottom: "20px",
+            left: left,
+            width: width,
+            padding: "10px 14px",
+            fontSize: "14px",
+            borderRadius: "8px",
+            background: "#6b63ff",
+            color: "white",
+            border: "none",
+            cursor: "pointer",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.3)",
+            zIndex: "99999",
+            ...extraCSS
+        });
 
+        btn.addEventListener("click", onClick);
         document.body.appendChild(btn);
+        return btn;
+    }
+    
+    function addDataDisplayButton() {
+        createButton({
+            text: "📘 Opponent Data",
+            left: "20px",
+            onClick: () => {
+                const data = loadData();
+                alert(JSON.stringify(data, null, 2));
+            }
+        });
     }
 
     function addManualWeaponButton() {
-        const btn = document.createElement("button");
-        btn.textContent = "➕ Add weapon manually";
-        btn.style.position = "fixed";
-        btn.style.bottom = "20px"; 
-        btn.style.left = "185px";
-        btn.style.width = "200px";
-        btn.style.padding = "10px 14px";
-        btn.style.fontSize = "14px";
-        btn.style.borderRadius = "8px";
-        btn.style.color = "white";
-        btn.style.border = "none";
-        btn.style.cursor = "pointer";
-        btn.style.background = "#6b63ff";
-        btn.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
-        btn.style.zIndex = "99999";
+        createButton({
+            text: "➕ Add weapon manually",
+            left: "185px",
+            width: "200px",
+            onClick: () => {
+                if (!enemyName) return alert("No enemy detected right now!");
 
-        btn.addEventListener("click", () => {
-            if (!enemyName) {
-                alert("No enemy detected right now!");
-                return;
-            }
+                const weapon = prompt(`Add weapon to ${enemyName}:`);
+                if (!weapon) return;
 
-            const weapon = prompt(`Add weapon to ${enemyName}:`).trim();
-            if (!weapon) return;
+                const data = loadData();
 
-            const data = loadData();
+                if (!data[enemyName]) {
+                    data[enemyName] = { weapons: [], abilities: [], stances: [] };
+                }
 
-            if (!data[enemyName]) {
-                data[enemyName] = { weapons: [], abilities: [], stances: [] };
-            }
-
-            if (!data[enemyName].weapons.includes(weapon)) {
-                data[enemyName].weapons.push(weapon);
-                saveData(data);
-                alert(`Added "${weapon}" to ${enemyName}.`);
-            } else {
-                alert(`"${weapon}" is already recorded for ${enemyName}.`);
+                if (!data[enemyName].weapons.includes(weapon)) {
+                    data[enemyName].weapons.push(weapon);
+                    saveData(data);
+                    alert(`Added "${weapon}" to ${enemyName}.`);
+                } else {
+                    alert(`"${weapon}" is already recorded for ${enemyName}.`);
+                }
             }
         });
-
-        document.body.appendChild(btn);
     }
 
     function addWipeButton() {
-        const btn = document.createElement("button");
-        btn.textContent = "🗑️";
-        btn.style.position = "fixed";
-        btn.style.bottom = "20px";
-        btn.style.left = "400px";
-        btn.style.padding = "10px 14px";
-        btn.style.fontSize = "14px";
-        btn.style.borderRadius = "8px";
-        btn.style.color = "white";
-        btn.style.border = "none";
-        btn.style.cursor = "pointer";
-        btn.style.background = "#6b63ff";
-        btn.style.boxShadow = "0 2px 6px rgba(0,0,0,0.3)";
-
-        btn.addEventListener("click", () => {
-            if (!enemyName) {
-                alert("No enemy detected right now!");
-                return;
-            }
-            if (confirm(`Delete stored data for "${enemyName}"?`)) {
-                wipeEnemyData(enemyName);
+        createButton({
+            text: "🗑️",
+            left: "400px",
+            width: "60px",
+            onClick: () => {
+                if (!enemyName) return alert("No enemy detected right now!");
+                if (confirm(`Delete stored data for "${enemyName}"?`)) {
+                    wipeEnemyData(enemyName);
+                }
             }
         });
-
-        document.body.appendChild(btn);
     }
 
     function parseBattleLog() {
