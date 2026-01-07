@@ -6,9 +6,6 @@
 // @match        *://*.grundos.cafe/quickstock*
 // @icon         https://avatars.githubusercontent.com/u/178112779?v=4&size=40
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/Lavfluff/GC-userscripts/refs/heads/main/gc-quickstock-overhaul.js
-// @downloadURL  https://raw.githubusercontent.com/Lavfluff/GC-userscripts/refs/heads/main/gc-quickstock-overhaul.js
-
 // ==/UserScript==
 
 (function () {
@@ -86,7 +83,7 @@
             : groupedItems.push(blocks);
     });
 
-    // clear original Layout
+    // clear Original Layout
     itemBlocks.flatMap(item => item.cells).forEach(cell => cell.remove());
 
     // Singles
@@ -110,6 +107,7 @@
             nameCell.style.background = 'var(--grid_select)';
             nameCell.style.display = 'flex';
             nameCell.style.alignItems = 'center';
+            nameCell.style.justifyContent = 'flex-start';
             nameCell.style.gap = '8px';
 
             const clearButton = createButton('Clear', () => {
@@ -121,10 +119,13 @@
                     )
                 );
             });
+            clearButton.style.minWidth = 'fit-content';
+            clearButton.style.maxWidth = 'fit-content';
 
             const label = document.createElement('strong');
             label.textContent = `${group[0].name} × ${group.length}`;
-
+            label.style.textAlign = 'center';
+            label.style.width = '100%';
             nameCell.appendChild(clearButton);
             nameCell.appendChild(label);
             groupRowCells.push(nameCell);
