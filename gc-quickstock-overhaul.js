@@ -6,6 +6,8 @@
 // @match        *://*.grundos.cafe/quickstock*
 // @icon         https://avatars.githubusercontent.com/u/178112779?v=4&size=40
 // @grant        none
+// @updateURL    https://raw.githubusercontent.com/Lavfluff/GC-userscripts/refs/heads/main/gc-quickstock-overhaul.js
+// @downloadURL  https://raw.githubusercontent.com/Lavfluff/GC-userscripts/refs/heads/main/gc-quickstock-overhaul.js
 // ==/UserScript==
 
 (function () {
